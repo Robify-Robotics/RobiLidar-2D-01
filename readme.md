@@ -1,5 +1,5 @@
 # USB-LIDAR DESCRIPTION#
-windows/linux SDK and Demo programs for lanhai 2d lidar
+[**RobiLidar-2D-01**](https://github.com/Robify-Robotics/RobiLidar-2D-01)
 
 #HOW TO BUILD AND USE#
 
