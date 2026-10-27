@@ -26,9 +26,6 @@ Generate a solution
 	vim xxxx.txt
 	set ff=unix
 
-#  Related address links #
-
-[downland ros drive](https://github.com/BlueSeaLidar/sdk2)
 
 
 
