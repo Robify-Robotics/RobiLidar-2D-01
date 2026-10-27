@@ -16,7 +16,7 @@ windows powershell
 
     use cmake_gui  build ,open project and compile
     need mfc support
-	Detailed operation reference  [SDK Development Manual](docs/SDK_Development_Manual.pdf)
+	Detailed operation reference  SDK Development Manual (provided separately)
 open project by  visual stdio 2013  or greater than this version 
 Generate a solution
 
