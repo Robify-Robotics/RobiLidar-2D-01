@@ -1,5 +1,5 @@
 # USB-LIDAR DESCRIPTION#
-[**RobiLidar-2D-01**](https://github.com/Robify-Robotics/RobiLidar-2D-01)
+windows/linux SDK and Demo programs for robilidar-2D-01
 
 #HOW TO BUILD AND USE#
 
