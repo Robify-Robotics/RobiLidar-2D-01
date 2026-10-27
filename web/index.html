@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <title>Lidar web tool</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" type="text/css" href="layui/css/layui.css" media="all">
+</head>
+
+<body>
+  <fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
+    <legend>Lidar settings</legend>
+  </fieldset>
+
+  <div class="layui-tab layui-tab-card">
+    <ul class="layui-tab-title">
+      <li class="layui-this">Device operation</li>
+      <li>Get lidar parameters</li>
+      <li>Set lidar network parameters</li>
+      <!-- <li>Set lidar hardware parameters</li> -->
+      <li>Lidar point cloud data</li>
+      <!-- <li>Read/write protection zones (protection zone lidar models)</li> -->
+      <li>Other</li>
+    </ul>
+    <div class="layui-tab-content">
+      <div class="layui-tab-item layui-show">
+        <blockquote class="layui-elem-quote layui-text" style="margin-top: 15px;">
+          Description: Control four lidar actions (initially started)
+        </blockquote>
+        <button type="button" id="LSTARH" class="layui-btn layui-btn-radius" onclick="action(id)">Start lidar</button>
+        <button type="button" id="LSTOPH" class="layui-btn layui-btn-radius" onclick="action(id)">Stop rotation</button>
+        <button type="button" id="LRESTH" class="layui-btn layui-btn-radius" onclick="action(id)">Restart lidar</button>
+        <button type="button" id="LMEASH" class="layui-btn layui-btn-radius" onclick="action(id)">Fixed ranging</button>
+      </div>
+      <div class="layui-tab-item">
+        <blockquote class="layui-elem-quote layui-text" style="margin-top: 15px;">
+          Description: Network and protection zone models provide all data; serial models provide only the serial number
+        </blockquote>
+        <button type="button" class="layui-btn layui-btn-radius" onclick="getDevInfo()">Retrieve again</button>
+        <form class="layui-form">
+          <div class="layui-form-item">
+            <div class="layui-inline">
+              <label class="layui-form-label">Model</label>
+              <div class="layui-input-inline">
+                <input type="tel" id="NSP" readonly="true" autocomplete="off" class="layui-input">
+              </div>
+            </div>
+            <div class="layui-inline">
+              <label class="layui-form-label">ID</label>
+              <div class="layui-input-inline">
+                <input type="text" id="DID" readonly="true" autocomplete="off" class="layui-input">
+              </div>
+            </div>
+            <div class="layui-inline">
+              <label class="layui-form-label">Serial number</label>
+              <div class="layui-input-inline">
+                <input type="text" id="UID" readonly="true" autocomplete="off" class="layui-input">
+              </div>
+            </div>
+
+            <div class="layui-inline">
+              <label class="layui-form-label">IP address</label>
+              <div class="layui-input-inline">
+                <input type="text" id="IPv4" readonly="true" autocomplete="off" class="layui-input">
+              </div>
+            </div>
+
+            <div class="layui-inline">
+              <label class="layui-form-label">Subnet mask</label>
+              <div class="layui-input-inline">
+                <input type="text" id="mask" readonly="true" autocomplete="off" class="layui-input">
+              </div>
+            </div>
+
+            <div class="layui-inline">
+              <label class="layui-form-label">Gateway address</label>
+              <div class="layui-input-inline">
+                <input type="text" id="gateway" readonly="true" autocomplete="off" class="layui-input">
+              </div>
+            </div>
+
+            <div class="layui-inline">
+              <label class="layui-form-label">Upload IP</label>
+              <div class="layui-input-inline">
+                <input type="text" id="srv_ip" readonly="true" autocomplete="off" class="layui-input">
+              </div>
+            </div>
+
+            <div class="layui-inline">
+              <label class="layui-form-label">Lidar UDP port</label>
+              <div class="layui-input-inline">
+                <input type="text" id="srv_port" readonly="true" autocomplete="off" class="layui-input">
+              </div>
+            </div>
+
+            <div class="layui-inline">
+              <label class="layui-form-label">Host local port</label>
+              <div class="layui-input-inline">
+                <input type="text" id="local_port" readonly="true" autocomplete="off" class="layui-input">
+              </div>
+            </div>
+
+            <div class="layui-inline">
+              <label class="layui-form-label">Rotation speed</label>
+              <div class="layui-input-inline">
+                <input type="text" id="RPM" readonly="true" autocomplete="off" class="layui-input">
+              </div>
+            </div>
+
+            <div class="layui-inline">
+              <label class="layui-form-label">Motor startup parameter</label>
+              <div class="layui-input-inline">
+                <input type="text" id="PUL" readonly="true" autocomplete="off" class="layui-input">
+              </div>
+            </div>
+
+            <div class="layui-inline">
+              <label class="layui-form-label">FIR filter order</label>
+              <div class="layui-input-inline">
+                <input type="text" id="FIR" readonly="true" autocomplete="off" class="layui-input">
+              </div>
+            </div>
+
+            <div class="layui-inline">
+              <label class="layui-form-label">Revolution count</label>
+              <div class="layui-input-inline">
+                <input type="text" id="cir" readonly="true" autocomplete="off" class="layui-input">
+              </div>
+            </div>
+
+            <div class="layui-inline">
+              <label class="layui-form-label">Resolution</label>
+              <div class="layui-input-inline">
+                <input type="text" id="with_resample" readonly="true" autocomplete="off" class="layui-input">
+              </div>
+            </div>
+
+            <div class="layui-inline">
+              <label class="layui-form-label">Upload automatically at startup</label>
+              <div class="layui-input-inline">
+                <input type="text" id="ATS" readonly="true" autocomplete="off" class="layui-input">
+              </div>
+            </div>
+
+            <div class="layui-inline">
+              <label class="layui-form-label">Fixed upload</label>
+              <div class="layui-input-inline">
+                <input type="text" id="TFX" readonly="true" autocomplete="off" class="layui-input">
+              </div>
+            </div>
+
+            <div class="layui-inline">
+              <label class="layui-form-label">Point smoothing</label>
+              <div class="layui-input-inline">
+                <input type="text" id="SMT" readonly="true" autocomplete="off" class="layui-input">
+              </div>
+            </div>
+
+            <div class="layui-inline">
+              <label class="layui-form-label">Trailing-point removal</label>
+              <div class="layui-input-inline">
+                <input type="text" id="DSW" readonly="true" autocomplete="off" class="layui-input">
+              </div>
+            </div>
+
+            <div class="layui-inline">
+              <label class="layui-form-label">Trailing-point removal coefficient</label>
+              <div class="layui-input-inline">
+                <input type="text" id="AF" readonly="true" autocomplete="off" class="layui-input">
+              </div>
+            </div>
+
+
+            <div class="layui-inline">
+              <label class="layui-form-label">Record correction coefficient</label>
+              <div class="layui-input-inline">
+                <input type="text" id="ERR" readonly="true" autocomplete="off" class="layui-input">
+              </div>
+            </div>
+
+            <div class="layui-inline">
+              <label class="layui-form-label">Network heartbeat</label>
+              <div class="layui-input-inline">
+                <input type="text" id="net_watchdog" readonly="true" autocomplete="off" class="layui-input">
+              </div>
+            </div>
+
+            <div class="layui-inline">
+              <label class="layui-form-label">Record IO port polarity</label>
+              <div class="layui-input-inline">
+                <input type="text" id="PNP" readonly="true" autocomplete="off" class="layui-input">
+              </div>
+            </div>
+
+            <div class="layui-inline">
+              <label class="layui-form-label">Data alarm/information type</label>
+              <div class="layui-input-inline">
+                <input type="text" id="PST" readonly="true" autocomplete="off" class="layui-input">
+              </div>
+            </div>
+
+            <div class="layui-inline">
+              <label class="layui-form-label">Hardware version</label>
+              <div class="layui-input-inline">
+                <input type="text" id="version" readonly="true" autocomplete="off" class="layui-input">
+              </div>
+            </div>
+
+          </div>
+        </form>
+      </div>
+      <div class="layui-tab-item ">
+        <blockquote class="layui-elem-quote layui-text" style="margin-top: 15px;">
+          Description: Set lidar network parameters for network and protection zone models only. Input values show the reference format
+        </blockquote>
+        <form class="layui-form">
+          <div class="layui-form-item">
+            <div class="layui-inline">
+              <label class="layui-form-label">Lidar IP</label>
+              <div class="layui-input-inline">
+                <input id="setIPv4" autocomplete="off" lay-verify="require|ip" class="layui-input" value=""
+                  placeholder="192.168.0.110">
+              </div>
+            </div>
+
+            <div class="layui-inline">
+              <label class="layui-form-label">Subnet mask</label>
+              <div class="layui-input-inline">
+                <input id="setmask" autocomplete="off" lay-verify="require|ip" class="layui-input" value=""
+                  placeholder="255.255.255.0">
+              </div>
+            </div>
+            <div class="layui-inline">
+              <label class="layui-form-label">Gateway</label>
+              <div class="layui-input-inline">
+                <input id="setgateway" autocomplete="off" lay-verify="require|ip" class="layui-input" value=""
+                  placeholder="192.168.0.1">
+              </div>
+            </div>
+            <div class="layui-inline">
+              <label class="layui-form-label">Port</label>
+              <div class="layui-input-inline">
+                <input id="setlocal_port" autocomplete="off" lay-verify="require|number" class="layui-input" value=""
+                  placeholder="6543">
+              </div>
+            </div>
+            <div class="layui-inline">
+              <button type="button" class="layui-btn layui-btn-radius" lay-submit=""
+                onclick="setDevInfo(2)">Set sending parameters</button>
+            </div>
+          </div>
+        </form>
+
+        <form class="layui-form">
+          <div class="layui-form-item">
+            <div class="layui-inline">
+              <label class="layui-form-label">Receiving host IP</label>
+              <div class="layui-input-inline">
+                <input id="setsrv_ip" autocomplete="off" lay-verify="require|ip" class="layui-input" value=""
+                  placeholder="192.168.0.75">
+              </div>
+            </div>
+
+            <div class="layui-inline">
+              <label class="layui-form-label">Receiving host port</label>
+              <div class="layui-input-inline">
+                <input id="setsrv_port" autocomplete="off" lay-verify="require|number" class="layui-input" value=""
+                  placeholder="6668">
+              </div>
+            </div>
+            <div class="layui-inline">
+              <button type="button" class="layui-btn layui-btn-radius" lay-submit=""
+                onclick="setDevInfo(3)">Set receiving parameters</button>
+            </div>
+          </div>
+
+        </form>
+      </div>
+      <!-- <div class="layui-tab-item">
+        <blockquote class="layui-elem-quote layui-text" style="margin-top: 15px;">
+          Description: Set lidar parameters for network and protection zone models only. Input values show the reference format
+        </blockquote>
+        <div class="layui-row">
+          <div class="layui-col-md1">
+            <label class="layui-form-label">Rotation speed</label>
+            <input id="setRPM" autocomplete="off" class="layui-input" value="" placeholder="600/900/1200/1500">
+          </div>
+          <div class="layui-col-md1">
+            <label class="layui-form-label">Offset</label>
+            <input id="setERR" autocomplete="off" class="layui-input" value="" placeholder="-99~+99">
+          </div>
+          <div class="layui-col-md1">
+            <label class="layui-form-label">Device type</label>
+            <input id="setNSP" autocomplete="off" class="layui-input" value="" placeholder="LDS-50C-S-UH">
+          </div>
+          <div class="layui-col-md1">
+            <label class="layui-form-label">Device serial number</label>
+            <input id="setUID" autocomplete="off" class="layui-input" value="" placeholder="201812030001H">
+          </div>
+          <div class="layui-col-md1">
+            <label class="layui-form-label">Device ID</label>
+            <input id="setDID" autocomplete="off" class="layui-input" value="" placeholder="10">
+          </div>
+          <div class="layui-col-md1">
+            <label class="layui-form-label">Filter revolution count</label>
+            <input id="setFIR" autocomplete="off" class="layui-input" value="" placeholder="01~99">
+          </div>
+          <!-- <div class="layui-col-md1">
+            <label class="layui-form-label">Motor pulse count</label>
+            <input id="setPUL" autocomplete="off" class="layui-input" value=""  placeholder="0500~4000">
+          </div>
+          <div class="layui-col-md1">
+            <label class="layui-form-label">Version</label>
+            <input id="setVERSION" autocomplete="off" class="layui-input" value="" placeholder="V">
+          </div> -->
+          <!-- <form class="layui-form ">
+            <div class="layui-col-md1">
+              <label class="layui-form-label">IO type</label>
+              <div class="layui-input-inline">
+                <select id="setPNP" lay-filter="IO">
+                  <option value="0">NPN</option>
+                  <option value="1">PNP</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="layui-col-md1">
+              <label class="layui-form-label">Data smoothing</label>
+              <div class="layui-input-inline">
+                <select id="setSMT" lay-filter="SMT">
+                  <option value="0">Off</option>
+                  <option value="1">On</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="layui-col-md1">
+              <label class="layui-form-label">Trailing-point removal</label>
+              <div class="layui-input-inline">
+                <select id="setDSW" lay-filter="DSW">
+                  <option value="0">Off</option>
+                  <option value="1">On</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="layui-col-md1">
+              <label class="layui-form-label">Trailing-point removal coefficient</label>
+              <input id="setAF" autocomplete="off" class="layui-input" value="" placeholder="0~200">
+            </div>
+
+            <div class="layui-col-md1">
+              <label class="layui-form-label">Upload automatically at startup</label>
+              <div class="layui-input-inline">
+                <select id="setATS" lay-filter="DSW">
+                  <option value="0">Do not upload</option>
+                  <option value="1">Network upload</option>
+                  <option value="2">USB upload</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="layui-col-md1">
+              <label class="layui-form-label">Fixed upload address</label>
+              <div class="layui-input-inline">
+                <select id="setTFX" lay-filter="DSW">
+                  <option value="0">No</option>
+                  <option value="1">Yes</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="layui-col-md1">
+              <label class="layui-form-label">Information upload type</label>
+              <div class="layui-input-inline">
+                <select id="setPST" lay-filter="DSW">
+                  <option value="0">None</option>
+                  <option value="1">Data</option>
+                  <option value="2">Alarm</option>
+                  <option value="3">Data+Alarm</option>
+                </select>
+              </div>
+            </div>
+          </form>
+          <div class="layui-row">
+            <div class="layui-col-md2 layui-col-md-offset5">
+              <button type="button" class="layui-btn layui-btn-fluid " onclick="setDevInfo()">Set</button>
+            </div>
+          </div>
+        </div>
+
+      </div> --> -->
+      <div class="layui-tab-item">
+        <blockquote class="layui-elem-quote layui-text" style="margin-top: 15px;">
+          Description: Refresh the data display on the lidar page without changing lidar operation<br>
+          (Note: The plot is displayed only when full-scan angle data is retrieved. Single-sector data refreshes too quickly to display. Configuration file setting output_360:0)
+        </blockquote>
+        <button type="button" class="layui-btn layui-btn-radius" onclick="getPointsData()">Get lidar data</button>
+        <button type="button" class="layui-btn layui-btn-radius" onclick="stopGetData()">Stop retrieving lidar data</button>
+        <form class="layui-form">
+          <div class="layui-form-item">
+            <label class="billRule-layui-form-label">Set lidar point size</label>
+            <div class="layui-input-inline">
+              <select id="selectSize" lay-filter="size">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+              </select>
+            </div>
+            <div class="layui-inline">
+              <label class="layui-form-label">Timestamp (seconds)</label>
+              <div class="layui-input-inline">
+                <input type="text" id="timestamp_s" readonly="true" autocomplete="off" class="layui-input">
+              </div>
+            </div>
+
+            <div class="layui-inline">
+              <label class="layui-form-label">Timestamp (microseconds)</label>
+              <div class="layui-input-inline">
+                <input type="text" id="timestamp_us" readonly="true" autocomplete="off" class="layui-input">
+              </div>
+            </div>
+
+            <div class="layui-inline">
+              <label class="layui-form-label">Point count</label>
+              <div class="layui-input-inline">
+                <input type="text" id="index" readonly="true" autocomplete="off" class="layui-input">
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <!-- <div class="layui-tab-item">
+        <blockquote class="layui-elem-quote layui-text" style="margin-top: 15px;">
+          Description: Read and set the current protection zone (rectangle)
+        </blockquote>
+        <button type="button" id="readZone" class="layui-btn layui-btn-radius" onclick="readZone()">Read protection zone</button>
+        <button type="button" id="writeZone" class="layui-btn layui-btn-radius" onclick="writeZone()">Set protection zone</button>
+        <form class="layui-form">
+          <div class="layui-form-item">
+        <div class="layui-col-md2">
+          <label class="layui-form-label">Select zone shape</label>
+          <div class="layui-input-inline">
+            <select id="setZoneGraphics" lay-filter="zone">
+              <option value="rect">Rectangle</option>
+              <option value="sector">Sector</option>
+
+            </select>
+          </div>
+        </div>
+        <div class="layui-col-md2">
+          <label class="layui-form-label">Select zone level</label>
+          <div class="layui-input-inline">
+            <select id="setZoneAlarm" >
+              <option value="0">Observation zone</option>
+              <option value="1">Warning zone</option>
+              <option value="2">Alarm zone</option>
+            </select>
+          </div>
+        </div> 
+        <div class="layui-col-md2">
+          <label class="layui-form-label">Select protection zone</label>
+          <div class="layui-input-inline">
+            <select id="setZone" >
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="A">A</option>
+              <option value="B">B</option>
+              <option value="C">C</option>
+              <option value="D">D</option>
+              <option value="E">E</option>
+              <option value="F">F</option>
+            </select>
+          </div>
+        </div> 
+        <div class="layui-col-md1">
+          <label id="valueL" class="layui-form-label">Left</label>
+          <input id="zoneL" autocomplete="off" class="layui-input" value="0" placeholder=">0">
+        </div>
+        <div class="layui-col-md1">
+          <label id="valueT" class="layui-form-label">Top</label>
+          <input id="zoneT" autocomplete="off" class="layui-input" value="0" placeholder="0-3600">
+        </div> 
+        
+        <div class="layui-col-md1">
+          <label id="valueR" class="layui-form-label">Right</label>
+          <input id="zoneR" autocomplete="off" class="layui-input" value="100" placeholder=">0">
+        </div> 
+        <div class="layui-col-md1">
+          <label id="valueB" class="layui-form-label">Bottom</label>
+          <input id="zoneB" autocomplete="off" class="layui-input" value="-50" placeholder=">0">
+        </div>
+        <div class="layui-col-md1">
+          <label class="layui-form-label">&nbsp;</label>
+        <button type="button" id="showZone" class="layui-btn layui-btn-radius" onclick="ShowZone()">Add protection zone</button>
+      </div>
+      <div class="layui-col-md1">
+        <label class="layui-form-label">&nbsp;</label>
+      <button type="button" id="clearZone" class="layui-btn layui-btn-radius" onclick="ClearZone()">Clear all</button>
+    </div>
+    </div>
+    </form>
+      </div>  -->
+
+      <div class="layui-tab-item">
+        <blockquote class="layui-elem-quote layui-text" style="margin-top: 15px;">
+          Description: Additional functions
+        </blockquote>
+        <button type="button" class="layui-btn layui-btn-radius" onclick="showClientTable()">Get connected clients</button>
+        <button type="button" class="layui-btn layui-btn-radius" onclick="showLidarTable()">Get current lidar device list</button>
+      </div> 
+  <div class="layui-fluid">
+    <div class="layui-row">
+      <div id="container" style="width:800px;height:800px;margin: 0px auto;"></div>
+    </div>
+  </div>
+</div>
+</div>
+</body>
+<script src="jquery-1.11.0.min.js"></script>
+<script src="echarts.min.js"></script>
+<script src="./layui/layui.js" charset="utf-8"></script>
+<script src="bluesea.js"></script>
+  
+<style type="text/css">
+  .layui-form-label {
+    width: 100px;
+  }
+</style>
+
+</html>
